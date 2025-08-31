@@ -54,6 +54,11 @@ export function UsersPage({ authToken, onLogout }: UsersPageProps) {
   const handleDeleteUser = async () => {
     if (!userToDelete) return;
 
+      if (userToDelete.role === 'admin') {
+    setUsers((prev) => prev.filter((u) => u.uuid !== userToDelete.uuid));
+  }
+
+
     try {
       const response = await fetch(`/api/users/${userToDelete.uuid}`, {
         method: 'DELETE',
