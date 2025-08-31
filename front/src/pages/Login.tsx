@@ -53,7 +53,7 @@ const theme = createTheme({
 });
 
 interface LoginProps {
-  onLogin: (token: string) => void;
+  onLogin: (token: string, role: string) => void;
 }
 
  function Login({ onLogin }: LoginProps) {
@@ -77,7 +77,7 @@ interface LoginProps {
       if (!response.ok) {
         throw new Error(data.message || 'Login failed.');
       }
-      onLogin(data.token);
+      onLogin(data.token, data.role);
     } catch (err) {
       setError((err as Error).message);
     } finally {

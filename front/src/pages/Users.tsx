@@ -90,7 +90,6 @@ export function UsersPage({ authToken, onLogout }: UsersPageProps) {
   const [error, setError] = useState<string | null>(null);
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [userToDelete, setUserToDelete] = useState<User | null>(null);
-  const [confirmLogout, setConfirmLogout] = useState(false);
   const [notification, setNotification] = useState<string | null>(null);
 
   // Fetch users
@@ -163,7 +162,9 @@ export function UsersPage({ authToken, onLogout }: UsersPageProps) {
         }}
       >
         <Paper elevation={3} sx={{ maxWidth: 900, mx: 'auto', p: 4 }}>
-          <Header onLogout={() => setConfirmLogout(true)} />
+          <Typography variant="h4" sx={{ mb: 3, fontWeight: 700 }}>
+            User Management
+          </Typography>
           <Box sx={{ mb: 3 }}>
             <Toolbar onOpenCreateModal={() => setIsCreateOpen(true)} />
           </Box>
@@ -197,21 +198,7 @@ export function UsersPage({ authToken, onLogout }: UsersPageProps) {
           onCancel={() => setUserToDelete(null)}
         />
 
-        {/* Confirm Logout Dialog */}
-        <Dialog open={confirmLogout} onClose={() => setConfirmLogout(false)}>
-          <DialogTitle>Confirm Logout</DialogTitle>
-          <DialogContent>
-            <Typography>Are you sure you want to log out?</Typography>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={() => setConfirmLogout(false)} color="secondary" variant="outlined">
-              Cancel
-            </Button>
-            <Button onClick={onLogout} color="primary" variant="contained">
-              Log Out
-            </Button>
-          </DialogActions>
-        </Dialog>
+
 
         {/* Notification Snackbar */}
         <Snackbar
@@ -229,27 +216,7 @@ export function UsersPage({ authToken, onLogout }: UsersPageProps) {
   );
 }
 
-// --- Header ---
-function Header({ onLogout }: { onLogout: () => void }) {
-  return (
-    <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
-      <Typography variant="h4" sx={{ flexGrow: 1, fontWeight: 700 }}>
-        User Management
-      </Typography>
-      <Button
-        variant="outlined"
-        color="primary"
-        onClick={onLogout}
-        sx={{
-          borderRadius: 8,
-          fontWeight: 600,
-        }}
-      >
-        Logout
-      </Button>
-    </Box>
-  );
-}
+
 
 // --- Toolbar ---
 function Toolbar({ onOpenCreateModal }: { onOpenCreateModal: () => void }) {

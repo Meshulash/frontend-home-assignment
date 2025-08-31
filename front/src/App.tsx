@@ -1,7 +1,9 @@
 import { useState } from 'react';
 import { BrowserRouter, Routes, Route, Navigate, useNavigate } from 'react-router-dom';
-import  Login  from './pages/Login';
+import Login from './pages/Login';
 import { UsersPage } from './pages/Users';
+import { MyAccount } from './pages/MyAccount';
+import { Layout } from './components/Layout';
 
 /**
  * A wrapper component to manage routing logic.
@@ -12,13 +14,15 @@ function AppRoutes() {
   const navigate = useNavigate();
 
   const handleLoginSuccess = (token: string, role: string) => {
-    if (role !== 'admin') {
-      alert('Login failed: Only admin users are allowed.');
-      return;
-    }
     setAuthToken(token);
     localStorage.setItem('authToken', token);
-    navigate('/users'); // Redirect to users page on successful login
+    
+    // Redirect based on role
+    if (role === 'admin') {
+      navigate('/users'); // Admin goes to user management
+    } else {
+      navigate('/account'); // Normal users go to their account page
+    }
   };
 
   const handleLogout = () => {
@@ -29,19 +33,33 @@ function AppRoutes() {
 
   return (
     <Routes>
-      <Route path="/login" element={<Login onLoginSuccess={handleLoginSuccess} />} />
+      <Route path="/login" element={<Login onLogin={handleLoginSuccess} />} />
       <Route
         path="/users"
         element={
           authToken ? (
-            <UsersPage authToken={authToken} onLogout={handleLogout} />
+            <Layout authToken={authToken} onLogout={handleLogout}>
+              <UsersPage authToken={authToken} onLogout={handleLogout} />
+            </Layout>
           ) : (
-            <Navigate to="/login" /> // Protect this route
+            <Navigate to="/login" />
+          )
+        }
+      />
+      <Route
+        path="/account"
+        element={
+          authToken ? (
+            <Layout authToken={authToken} onLogout={handleLogout}>
+              <MyAccount authToken={authToken} onLogout={handleLogout} />
+            </Layout>
+          ) : (
+            <Navigate to="/login" />
           )
         }
       />
       {/* Default route redirects based on auth status */}
-      <Route path="*" element={<Navigate to={authToken ? "/users" : "/login"} />} />
+      <Route path="*" element={<Navigate to={authToken ? "/account" : "/login"} />} />
     </Routes>
   );
 }
