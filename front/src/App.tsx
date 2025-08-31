@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { BrowserRouter, Routes, Route, Navigate, useNavigate } from 'react-router-dom';
-import { LoginPage } from './pages/Login';
+import  Login  from './pages/Login';
 import { UsersPage } from './pages/Users';
 
 /**
@@ -29,7 +29,7 @@ function AppRoutes() {
 
   return (
     <Routes>
-      <Route path="/login" element={<LoginPage onLoginSuccess={handleLoginSuccess} />} />
+      <Route path="/login" element={<Login onLoginSuccess={handleLoginSuccess} />} />
       <Route
         path="/users"
         element={
